@@ -6,7 +6,7 @@ module "ec2_instance" {
   name = "EC2-instance-${count.index + 1}"
 
   instance_type          = "t2.micro"
-  key_name               = "icloud_given_KP"
+  key_name               = module.key_pair[count.index % 2].key_pair_name
   monitoring             = false
   vpc_security_group_ids = [module.web_server_sg[count.index].security_group_id]
   subnet_id              = module.vpc[count.index].public_subnets[0]
@@ -27,7 +27,6 @@ module "ec2_instance" {
               EOF
 
   tags = {
-    Terraform   = "true"
-    Environment = "dev"
+    Name = "Instance-${count.index + 1}"
   }
 }
